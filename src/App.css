@@ -63,3 +63,9 @@ body {
 .logNumPopUp button {
     max-width: 50%;
 }
+label input {
+  display: none;
+}
+.star {
+  cursor: pointer;
+}
