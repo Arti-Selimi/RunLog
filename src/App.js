@@ -1,10 +1,10 @@
-import './App.css';
+import './styles/App.scss';
 import { Navbar } from './Navbar';
 import { Options } from './Options';
 
 function App() {
   return (
-    <div className="App">
+    <div className="container">
       <Navbar />
       <Options />
     </div>

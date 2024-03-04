@@ -1,18 +1,17 @@
 import { useState } from "react"
-import {LogNumPopUp} from "./popups/logNumPopUp"
-import { RatingPopUp } from "./popups/ratingPopUp"
+import {Modal} from "./popups/Modal"
 
 export const Options = () => {
 
-    const [ toggle, setToggle ] = useState ("")
+    const [ toggle, setToggle ] = useState(false)
+    const [ typeOfModal, setTypeOfModal ] = useState("")
 
     return (
-        <div className="Options">
-            <LogNumPopUp toggle = {toggle}/>
-            <button onClick={() =>setToggle("logNum")}>Log number</button>
-            <button>Location</button>
-            <RatingPopUp toggle = {toggle}/>
-            <button onClick={() => setToggle("rate")}>Rating</button>
+        <div className="options">
+            <Modal closeModal={() => setToggle(!toggle)} toggle = {toggle} typeOfModal={typeOfModal}/>
+            <button onClick={() => {setToggle(!toggle); setTypeOfModal('Log')}}>Log no.</button>
+            <button onClick={() => {setToggle(!toggle); setTypeOfModal('Locate')}}>Location</button>
+            <button onClick={() => {setToggle(!toggle); setTypeOfModal('Rate')}}>Rating</button>
         </div>
     )
 }
