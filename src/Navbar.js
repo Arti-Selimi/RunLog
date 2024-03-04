@@ -1,9 +1,9 @@
+import logo from './Images/logo.png'
 
 export const Navbar = () => {
-  return (
-    <div className="navbar">
-      <h1>Desmutacioni</h1>
-      <button>Sign in</button>
-    </div>
-  );
-};
+    return (
+        <div className='navbar'>
+            <img src={logo} width={"100px"}/>
+        </div>
+    )
+}
