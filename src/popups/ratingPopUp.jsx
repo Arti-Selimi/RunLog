@@ -7,8 +7,7 @@ export const RatingPopUp = (props) => {
     console.log(props.toggle)
   return (
     <div style={{ display: props.toggle === "rate" ? "flex" : "none" }}>
-      {[
-        ...Array(5)].map((star, index) => {
+      {[...Array(5)].map((star, index) => {
           const currentRating = index + 1;
           return (
             <label>
