@@ -7,7 +7,7 @@ export const LogNumPopUp = (props) => {
 
   return (
     <div className="logNumPopUp" style={{ display: props.toggle === "logNum" ? "flex" : "none" }}>
-      <p>
+      <p style={{margin : "0"}}>
         This is your{" "}
         <input
           type="number"
@@ -16,7 +16,7 @@ export const LogNumPopUp = (props) => {
             setCount(e.target.value);
             setValue(e.target.value);
           }}
-          style={{ width: `${value.length}ch` }}
+          style={{ width: `${value.length > 0 ? value.length : 1}ch` }}
         />
         {count === "11" || count === "12" || count === "13"
           ? "th"
@@ -29,7 +29,7 @@ export const LogNumPopUp = (props) => {
           : "th"}{" "}
         poop of the day
       </p>
-      <button>Log</button>
+      <button onClick={() => props.togglePopUp("w")}>Exit</button>
     </div>
   );
 };

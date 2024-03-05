@@ -6,7 +6,8 @@ export const RatingPopUp = (props) => {
     const [hover, setHover] = useState(null)
     console.log(props.toggle)
   return (
-    <div style={{ display: props.toggle === "rate" ? "flex" : "none" }}>
+    <div className="ratingPopUp" style={{ display: props.toggle === "rate" ? "flex" : "none" }}>
+      <div>
       {[...Array(5)].map((star, index) => {
           const currentRating = index + 1;
           return (
@@ -26,6 +27,8 @@ export const RatingPopUp = (props) => {
             </label>
           );
         })}
+      </div>
+        <button onClick={() => props.togglePopUp("w")}>Exit</button>
     </div>
   );
 };

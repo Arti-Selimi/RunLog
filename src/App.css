@@ -1,25 +1,30 @@
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
 @font-face {
-  font-family: Lato;
-  font-weight: bold;
-  src: url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 100 900;
+  src: url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap');
 }
+
 body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  width: calc(100vw - scrollbarWidth);
+  width: 100vw; 
   color: #333333;
-  font-family: Lato;
+  font-family: 'Lato', sans-serif; 
 }
+
 .navbar {
   display: flex;
   justify-content: center;
 }
+
 .App {
   height: 70vh;
   display: flex;
@@ -27,45 +32,71 @@ body {
   align-items: center;
   justify-content: space-evenly;
 }
+
 .Options {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  max-width: 70%; 
+  padding: 10px;
 }
+
 .Options button {
   padding: 10px;
   border-radius: 30px;
   margin: 10px;
-  max-width: 180%;
-  min-width: 100%;
+  width: 100%;
   background-color: #fb7680;
   border: 2px solid #020202;
   font-size: 1.3rem;
+  max-width: 150px;
 }
-.logNumPopUp {
+
+.logNumPopUp, .ratingPopUp, .locationPupUp {
   background-color: #fb7680;
-  min-width: 100%;
+  width: 100%; 
   height: 100%;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  padding: 10px;
+  font-size: 1.3rem;
   border: 2px solid #020202;
   border-radius: 30px;
 }
+
 .logNumPopUp input {
   background-color: #fb7680;
   font-size: 2rem;
   color: #333333;
-  border: 1px dotted;
+  border: none;
+  border-bottom: 1px solid;
+  outline: none;
   padding: 5px;
 }
+
 .logNumPopUp button {
-    max-width: 50%;
+  width: 50%; 
 }
+
 label input {
   display: none;
 }
+
 .star {
   cursor: pointer;
+}
+
+#dropdown {
+  padding: 10px;
+  border: none;
+  background-color: #fb7680;
+}
+
+#dropdown option {
+  font-size: 1.3rem;
+  padding: 10px;
+  outline: none;
 }
