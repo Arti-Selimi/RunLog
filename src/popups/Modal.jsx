@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 
 export const Modal = (props) => {
@@ -9,8 +9,19 @@ export const Modal = (props) => {
   const [rating , setRating] = useState(null)
   const [hover, setHover] = useState(null)
 
-  const itemCount = useMemo(() => count === 0 ? '1st' : count === 1 ? '2nd' : count===2 ? '3rd' : `${count+1}th`, [count]);
+  useEffect(() => {
+    if(count){
+        localStorage.setItem('count', count);
+    }
+    if(hover){
+        localStorage.setItem('rating', hover);
+    }
+    if(location){
+        localStorage.setItem('location', location);
+    }
+  });
 
+  const itemCount = useMemo(() => count === 0 ? '1st' : count === 1 ? '2nd' : count===2 ? '3rd' : `${count+1}th`, [count]);
 
     if(props.toggle){
         return (
@@ -26,9 +37,9 @@ export const Modal = (props) => {
                     {props.typeOfModal === 'Locate' && (
                         <>
                         <p>Just took a huge poo at</p>
-                        <button onClick={() => { setLocation("Zyre"); props.closeModal(); }}>Zyre 🙈</button>
-                        <button onClick={() => { setLocation("Shpi"); props.closeModal(); }}>Shpi 😒</button>
-                        <button onClick={() => { setLocation("Banese"); props.closeModal(); }}>Banese 🦅</button>
+                        <button onClick={() => { setLocation('Zyre'); props.closeModal(); }}>Zyre 🙈</button>
+                        <button onClick={() => { setLocation('Shpi'); props.closeModal(); }}>Shpi 😒</button>
+                        <button onClick={() => { setLocation('Banese'); props.closeModal(); }}>Banese 🦅</button>
                         </>                        
                     )}
                     {props.typeOfModal === 'Rate' && (
@@ -38,7 +49,7 @@ export const Modal = (props) => {
                         {[...Array(5)].map((star, index) => {
                             const currentRating = index + 1;
                             return (
-                                <label>
+                                <label key={index}>
                                     <input
                                     type="radio"
                                     value={currentRating}
