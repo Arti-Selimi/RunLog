@@ -83,10 +83,11 @@ label input {
 
     p{
       margin:0;
+      text-align: center;
     }
     >button{
       padding: 8px 15px;
-      width: 30%;
+      width: 40%;
       border-radius: 20px;
       font-size: 1rem;
       border: none;
@@ -98,4 +99,8 @@ label input {
       }
     }
   }
+}
+
+.stars__container{
+  display: flex;
 }
