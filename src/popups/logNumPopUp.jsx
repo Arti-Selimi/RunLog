@@ -7,6 +7,7 @@ export const LogNumPopUp = (props) => {
 
   return (
     <div className="logNumPopUp" style={{ display: props.toggle === "logNum" ? "flex" : "none" }}>
+              <h2>Poop Number</h2>
       <p style={{margin : "0"}}>
         This is your{" "}
         <input
