@@ -43,8 +43,8 @@ export const Login = () => {
     function writeUserData() {
         const db = database;
         set(ref(db, "accounts/"), {
-          email: localStorage.getItem("location"),
-          password: localStorage.getItem("rating"),
+          email: localStorage.getItem("email"),
+          password: localStorage.getItem("password"),
         });
     }
   return (
