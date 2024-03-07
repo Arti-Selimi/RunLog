@@ -9,8 +9,7 @@ export const Login = () => {
 
     useEffect(() => {
         if (handleSubmit) {
-          localStorage.setItem("email", schema.email);
-          localStorage.setItem("password", schema.password)
+          writeLoginData();
         }
       });
 
@@ -37,19 +36,26 @@ export const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data,event) => {
+    event.preventDefault();
     console.log(data);
+    if(handleSubmit) {
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("password", data.password)
     }
-    function writeUserData() {
+    }
+    function writeLoginData() {
         const db = database;
         set(ref(db, "accounts/"), {
           email: localStorage.getItem("email"),
           password: localStorage.getItem("password"),
         });
+        console.log(localStorage)
     }
+
   return (
     <div>
-      <form className="logInForm" onSubmit={()=> {handleSubmit(onSubmit); writeUserData()}}>
+      <form className="logInForm" onSubmit={handleSubmit(onSubmit)}>
         <input type="text" placeholder="E-mail" {...register("email")} />
         <p>{errors.email?.message}</p>
         <input
@@ -64,7 +70,8 @@ export const Login = () => {
           {...register("verifiedPassword")}
         />
         <p>{errors.verifiedPassword?.message}</p>
-        <input type="submit" />
+
+            <input type="submit" />
       </form>
     </div>
   );
