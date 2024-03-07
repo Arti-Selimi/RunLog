@@ -4,7 +4,6 @@ import { FaStar } from "react-icons/fa";
 export const RatingPopUp = (props) => {
     const [rating , setRating] = useState(null)
     const [hover, setHover] = useState(null)
-    console.log(props.toggle)
   return (
     <div className="ratingPopUp" style={{ display: props.toggle === "rate" ? "flex" : "none" }}>
       <h2>Poop Rating</h2>
