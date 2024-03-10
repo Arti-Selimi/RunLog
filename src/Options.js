@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Modal } from './popups/Modal';
-import { ref, set } from "firebase/database";
+import { push, ref, set } from "firebase/database";
 import { database } from './config/firebase';
 
 export const Options = () => {
@@ -9,7 +9,7 @@ export const Options = () => {
 
   function writeUserData() {
     const db = database;
-    set(ref(db, 'counts/'), {
+    push(ref(db, 'counts/'), {
       location: localStorage.getItem('location'),
       rating: localStorage.getItem('rating'),
       count: localStorage.getItem('count')

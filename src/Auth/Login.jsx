@@ -1,17 +1,11 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { ref, set } from "firebase/database";
+import { push, ref, set } from "firebase/database";
 import { database } from "../config/firebase";
 
 export const Login = () => {
-
-    useEffect(() => {
-        if (handleSubmit) {
-          writeLoginData();
-        }
-      });
 
   const schema = yup.object().shape({
     email: yup
@@ -36,22 +30,22 @@ export const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data,event) => {
+  const onSubmit = (data, event) => {
     event.preventDefault();
     console.log(data);
-    if(handleSubmit) {
-        localStorage.setItem("email", data.email);
-        localStorage.setItem("password", data.password)
+    if (handleSubmit) {
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("password", data.password);
     }
-    }
-    function writeLoginData() {
-        const db = database;
-        set(ref(db, "accounts/"), {
-          email: localStorage.getItem("email"),
-          password: localStorage.getItem("password"),
-        });
-        console.log(localStorage)
-    }
+  };
+  function writeLoginData() {
+    const db = database;
+    push(ref(db, "accounts/"), {
+      email: localStorage.getItem("email"),
+      password: localStorage.getItem("password"),
+    });
+    console.log(localStorage);
+  }
 
   return (
     <div>
@@ -70,8 +64,7 @@ export const Login = () => {
           {...register("verifiedPassword")}
         />
         <p>{errors.verifiedPassword?.message}</p>
-
-            <input type="submit" />
+        <input type="submit" onClick={writeLoginData}/>
       </form>
     </div>
   );

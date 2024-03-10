@@ -2,7 +2,7 @@ import './styles/App.scss';
 import { Navbar } from './Navbar';
 import { Options } from './Options';
 import { Login } from './Auth/Login';
-import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
