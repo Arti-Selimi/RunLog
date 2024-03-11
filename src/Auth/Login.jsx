@@ -12,7 +12,6 @@ import {
 } from "firebase/database";
 import { database } from "../config/firebase";
 import { useNavigate, Link } from "react-router-dom";
-import { Options } from "../Options";
 
 export const Login = () => {
   const navigate = useNavigate();
