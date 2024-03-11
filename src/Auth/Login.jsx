@@ -2,11 +2,20 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { getDatabase, push, ref, get, child } from "firebase/database";
+import {
+  push,
+  ref,
+  get,
+  query,
+  equalTo,
+  orderByChild,
+} from "firebase/database";
 import { database } from "../config/firebase";
+import { useNavigate, Link } from "react-router-dom";
+import { Options } from "../Options";
 
 export const Login = () => {
-    const [accountStatus, setAccountStatus] = useState(false)
+  const navigate = useNavigate();
 
   const schema = yup.object().shape({
     email: yup
@@ -34,33 +43,26 @@ export const Login = () => {
   const onSubmit = async (data, event) => {
     event.preventDefault();
     console.log(data);
-    if (handleSubmit) {
-      try {
-        const dbRef = ref(getDatabase());
-        const snapshot = await get(child(dbRef, "accounts"));
-
-        snapshot.forEach((childSnapshot) => {
-          console.log("Account ID:", childSnapshot.key);
-          console.log("Account Data:", childSnapshot.val());
-
-          if (childSnapshot.val().email === data.email) {
-            alert("An account with this email already exists");
-            setAccountStatus(true)
-            return;
-          } 
-          if(!accountStatus) {
-            return;
-          }
-          localStorage.setItem("email", data.email);
-            localStorage.setItem("password", data.password);
-            console.log("New account data:", data);
-            writeLoginData();
-        });
-      } catch (error) {
-        console.error(error);
-      }
+    const emailExists = await checkEmailExists(data.email);
+    if (emailExists) {
+      console.log("Email already exists in the database");
+      navigate('/Options');
+      return;
     }
+    localStorage.setItem("email", data.email);
+    localStorage.setItem("password", data.password);
+    console.log("New account data:", data);
+    writeLoginData();
   };
+
+  async function checkEmailExists(email) {
+    const db = database;
+    const dbRef = ref(db, "accounts/");
+    const emailQuery = query(dbRef, orderByChild("email"), equalTo(email));
+    const snapshot = await get(emailQuery);
+    return snapshot.exists();
+  }
+
   function writeLoginData() {
     const db = database;
     push(ref(db, "accounts/"), {
