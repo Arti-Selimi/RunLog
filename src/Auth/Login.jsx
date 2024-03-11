@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { push, ref, set } from "firebase/database";
+import { getDatabase, push, ref, get, child } from "firebase/database";
 import { database } from "../config/firebase";
 
 export const Login = () => {
+    const [accountStatus, setAccountStatus] = useState(false)
 
   const schema = yup.object().shape({
     email: yup
@@ -30,12 +31,34 @@ export const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data, event) => {
+  const onSubmit = async (data, event) => {
     event.preventDefault();
     console.log(data);
     if (handleSubmit) {
-      localStorage.setItem("email", data.email);
-      localStorage.setItem("password", data.password);
+      try {
+        const dbRef = ref(getDatabase());
+        const snapshot = await get(child(dbRef, "accounts"));
+
+        snapshot.forEach((childSnapshot) => {
+          console.log("Account ID:", childSnapshot.key);
+          console.log("Account Data:", childSnapshot.val());
+
+          if (childSnapshot.val().email === data.email) {
+            alert("An account with this email already exists");
+            setAccountStatus(true)
+            return;
+          } 
+          if(!accountStatus) {
+            return;
+          }
+          localStorage.setItem("email", data.email);
+            localStorage.setItem("password", data.password);
+            console.log("New account data:", data);
+            writeLoginData();
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
   function writeLoginData() {
@@ -64,7 +87,7 @@ export const Login = () => {
           {...register("verifiedPassword")}
         />
         <p>{errors.verifiedPassword?.message}</p>
-        <input type="submit" onClick={writeLoginData}/>
+        <input type="submit" />
       </form>
     </div>
   );
