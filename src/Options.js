@@ -39,6 +39,7 @@ export const Options = () => {
 
   return (
     <div className="options">
+      <h1>Current user: {currentUser}</h1>
     <Modal closeModal={() => setToggle(!toggle)} toggle={toggle} typeOfModal={typeOfModal} />
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Log') }}>Log no.</button>
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Locate') }}>Location</button>
