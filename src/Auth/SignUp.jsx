@@ -61,20 +61,17 @@ export const SignUp = () => {
       .then((userCredential) => {
         const user = userCredential.user;
         navigate("/Options");
+        console.log(data.username)
         setCurrentUser(data.username);
+        const db = database;
+        set(ref(db, 'users/' + data.username), {    
+        });
       })
       .catch((error) => {
         console.log(error);
         alert("This user already exists, try logging in");
         reset();
       });
-      const writeUserData = (userId) => {
-        const db = database;
-        set(ref(db, 'users/' + userId), {
-          username: data.username,
-          email: data.email,
-        });
-      }  
     };
 
   return (

@@ -1,26 +1,26 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Modal } from './popups/Modal';
-import { push, ref } from "firebase/database";
+import { push, ref, set, update } from "firebase/database";
 import { database, auth } from './config/firebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from './App';
 
 export const Options = () => {
-  const {currentUser} = useContext(AppContext)
+  const {currentUser, setFormState, formState} = useContext(AppContext)
   const [toggle, setToggle] = useState(false);
   const [typeOfModal, setTypeOfModal] = useState("");
   const navigate = useNavigate();
   
   useEffect(() => {
-    if(!currentUser) {
+    if(currentUser === '') {
       navigate('/')
     } 
   })
 
   function writeUserData() {
     const db = database;
-    push(ref(db, 'poopLogs'), {
+    push(ref(db, 'users/' + currentUser), {
       user: currentUser,
       location: localStorage.getItem('location'),
       rating: localStorage.getItem('rating'),
@@ -33,6 +33,7 @@ export const Options = () => {
       navigate('/')
     }).catch((error) => {
       alert('Something went wrong :3')
+      console.log(error)
     });
   }
 
@@ -43,7 +44,7 @@ export const Options = () => {
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Locate') }}>Location</button>
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Rate') }}>Rating</button>
     <button onClick={()=>writeUserData()}>Test Set Values</button>
-    <button onClick={handleSignOut}>Sign out</button>
+    <button onClick={() => {handleSignOut(); setFormState(false)}} >Sign out</button>
     </div>
   );
 };
