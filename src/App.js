@@ -1,7 +1,7 @@
 import "./styles/App.scss";
 import { Navbar } from "./Navbar";
 import { Options } from "./Options";
-import { Login } from "./Auth/Login";
+import { SignUp } from "./Auth/SignUp";
 import {
   BrowserRouter as Router,
   Routes,
@@ -24,7 +24,7 @@ function App() {
         <Router>
           <Navbar />
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<SignUp />} />
             <Route path="/Options" element={<Options />} />
           </Routes>
         </Router>
