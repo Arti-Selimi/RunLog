@@ -6,26 +6,32 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  useNavigate
 } from "react-router-dom";
 import { useState, createContext } from "react";
+import { Login } from "./Auth/Login";
 
 export const AppContext = createContext();
 
 function App() {
+  const [formState, setFormState] = useState(true)
   const [currentUser, setCurrentUser] = useState({
-    user: "",
+    name: "",
   });
   return (
     <div className="container">
       <AppContext.Provider value={{
         currentUser,
-        setCurrentUser
+        setCurrentUser,
+        formState,
+        setFormState,
       }}>
         <Router>
           <Navbar />
           <Routes>
-            <Route path="/" element={<SignUp />} />
+            <Route path="/Signup" element={<SignUp />} />
             <Route path="/Options" element={<Options />} />
+            <Route path="/" element={<Login />} />
           </Routes>
         </Router>
         </AppContext.Provider>

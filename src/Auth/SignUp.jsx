@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -15,8 +15,18 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
 
 export const SignUp = () => {
-  const { setCurrentUser } = useContext(AppContext);
-  const navigate = useNavigate();
+  const {formState, setFormState,} = useContext(AppContext)
+  const navigate = useNavigate()
+
+  const handleFormState = () => {
+    setFormState(!formState)
+    console.log("Form state", formState)
+    if(formState) {
+      navigate('/')
+    } else {
+      navigate('/SignUp')
+    }
+  }
 
   const schema = yup.object().shape({
     username: yup.string().required(),
@@ -50,7 +60,7 @@ export const SignUp = () => {
     const emailExists = await checkEmailExists(data.email);
     if (emailExists) {
       alert("Account already exists in the database, try logging in.");
-      navigate()
+      navigate("./Login")
       return;
     }
     localStorage.setItem("username", data.username);
@@ -111,6 +121,7 @@ export const SignUp = () => {
             border: "none",
             background: "transparent",
           }}
+          onClick={handleFormState}
         >
           Sign In
         </button>
