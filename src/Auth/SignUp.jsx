@@ -1,32 +1,27 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {
-  push,
-  ref,
-  get,
-  query,
-  equalTo,
-  orderByChild,
-} from "firebase/database";
-import { database } from "../config/firebase";
+import { auth, database } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { ref, set} from "firebase/database"
 
 export const SignUp = () => {
-  const {formState, setFormState,} = useContext(AppContext)
-  const navigate = useNavigate()
+  const { formState, setFormState, currentUser, setCurrentUser } =
+    useContext(AppContext);
+  const navigate = useNavigate();
 
   const handleFormState = () => {
-    setFormState(!formState)
-    console.log("Form state", formState)
-    if(formState) {
-      navigate('/')
+    setFormState(!formState);
+    console.log("Form state", formState);
+    if (formState) {
+      navigate("/");
     } else {
-      navigate('/SignUp')
+      navigate("/SignUp");
     }
-  }
+  };
 
   const schema = yup.object().shape({
     username: yup.string().required(),
@@ -57,38 +52,30 @@ export const SignUp = () => {
   const onSubmit = async (data, event) => {
     event.preventDefault();
     console.log("data", data);
-    const emailExists = await checkEmailExists(data.email);
-    if (emailExists) {
-      alert("Account already exists in the database, try logging in.");
-      navigate("./Login")
-      return;
-    }
-    localStorage.setItem("username", data.username);
-    localStorage.setItem("email", data.email);
-    localStorage.setItem("password", data.password);
-    console.log("New account data:", data);
-    writeLoginData();
-    reset();
-  };
-
-  async function checkEmailExists(email) {
-    const db = database;
-    const dbRef = ref(db, "accounts/");
-    const emailQuery = query(dbRef, orderByChild("email"), equalTo(email));
-    const snapshot = await get(emailQuery);
-    console.log(snapshot);
-    return snapshot.exists();
-  }
-
-  function writeLoginData() {
-    const db = database;
-    push(ref(db, "accounts/"), {
-      username: localStorage.getItem("username"),
-      email: localStorage.getItem("email"),
-      password: localStorage.getItem("password"),
-    });
-    console.log(localStorage);
-  }
+    createUserWithEmailAndPassword(
+      auth,
+      data.email,
+      data.password,
+      data.username
+    )
+      .then((userCredential) => {
+        const user = userCredential.user;
+        navigate("/Options");
+        setCurrentUser(data.username);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("This user already exists, try logging in");
+        reset();
+      });
+      const writeUserData = (userId) => {
+        const db = database;
+        set(ref(db, 'users/' + userId), {
+          username: data.username,
+          email: data.email,
+        });
+      }  
+    };
 
   return (
     <div>
@@ -113,16 +100,7 @@ export const SignUp = () => {
       </form>
       <h4>
         Already have an account?
-        <button
-          style={{
-            color: "blue",
-            textDecoration: "underline",
-            cursor: "pointer",
-            border: "none",
-            background: "transparent",
-          }}
-          onClick={handleFormState}
-        >
+        <button className="formStateButton" onClick={handleFormState}>
           Sign In
         </button>
       </h4>

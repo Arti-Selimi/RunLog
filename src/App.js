@@ -5,19 +5,18 @@ import { SignUp } from "./Auth/SignUp";
 import {
   BrowserRouter as Router,
   Routes,
-  Route,
-  useNavigate
+  Route
 } from "react-router-dom";
 import { useState, createContext } from "react";
 import { Login } from "./Auth/Login";
+
 
 export const AppContext = createContext();
 
 function App() {
   const [formState, setFormState] = useState(true)
-  const [currentUser, setCurrentUser] = useState({
-    name: "",
-  });
+  const [currentUser, setCurrentUser] = useState("");
+  
   return (
     <div className="container">
       <AppContext.Provider value={{

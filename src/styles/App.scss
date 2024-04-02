@@ -6,20 +6,21 @@ input::-webkit-inner-spin-button {
   color: #f0c5c5;
 }
 
-body, #root {
+body,
+#root {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   color: #333333;
   height: 100vh;
-  font-family:  "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
+  font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
 }
 .navbar {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  h2{
+  h2 {
     margin: 8px 0;
     color: #b92c5d;
   }
@@ -58,19 +59,19 @@ label input {
 .star {
   cursor: pointer;
 }
-.modal{
+.modal {
   position: relative;
   width: 80%;
   color: #b92c5d;
-  &__overlay{
+  &__overlay {
     position: fixed;
     top: 0;
-    left:0;
+    left: 0;
     width: 100%;
     height: 100%;
     background: #c6b0beb0;
   }
-  &__container{
+  &__container {
     position: absolute;
     z-index: 10;
     padding: 40px 20px;
@@ -82,13 +83,13 @@ label input {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap:30px;
+    gap: 30px;
 
-    p{
-      margin:0;
+    p {
+      margin: 0;
       text-align: center;
     }
-    >button{
+    > button {
       padding: 8px 15px;
       width: 40%;
       border-radius: 20px;
@@ -96,15 +97,15 @@ label input {
       border: none;
       background-color: #b92c5d;
       color: #f0c5c5;
-      &:active{
-        transform: scale(.98);
+      &:active {
+        transform: scale(0.98);
         background-color: #b22b59;
       }
     }
   }
 }
 
-.stars__container{
+.stars__container {
   display: flex;
 }
 
@@ -128,4 +129,11 @@ label input {
     color: red;
     text-decoration: underline;
   }
+}
+.formStateButton {
+  text-decoration: underline;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: blue;
 }

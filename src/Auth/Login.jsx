@@ -1,17 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {
-  ref,
-  get,
-  query,
-  equalTo,
-  orderByChild,
-} from "firebase/database";
-import { database } from "../config/firebase";
+import { auth } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const schema = yup.object().shape({
   email: yup
@@ -22,18 +16,18 @@ const schema = yup.object().shape({
 });
 
 export const Login = () => {
-  const {formState, setFormState,} = useContext(AppContext)
-  const navigate = useNavigate()
+  const { formState, setFormState, currentUser, setCurrentUser } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const handleFormState = () => {
-    setFormState(!formState)
-    console.log("Form state", formState)
-    if(formState) {
-      navigate('/')
+    setFormState(!formState);
+    console.log("Form state", formState);
+    if (formState) {
+      navigate("/");
     } else {
-      navigate('/SignUp')
+      navigate("/SignUp");
     }
-  }
+  };
 
   const {
     register,
@@ -44,29 +38,19 @@ export const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (data, event) => {
-    try {
+  const onSubmit = (data, event) => {
       event.preventDefault();
       console.log("data", data);
-      const emailExists = await checkAccountExists(data.email);
-      if (emailExists) {
-        console.log("it exists")
-        navigate('../Options')
-      } else {
-        alert("This account does not exist, try signing up")
-      }
-      reset();
-    } catch (error) {
-      console.error("Error logging in:", error);
-    }
-  };
-  async function checkAccountExists(email) {
-    const db = database;
-    const dbRef = ref(db, "accounts/");
-    const emailQuery = query(dbRef, orderByChild("email"), equalTo(email));
-    const snapshot = await get(emailQuery);
-    console.log(snapshot);
-    return snapshot.exists();
+      signInWithEmailAndPassword(auth, data.email, data.password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          navigate('/Options')
+          setCurrentUser(user.username)
+          console.log(user.username)
+        })
+        .catch((error) => {
+          alert("User credentials wrong or this account doesnt exist, maybe try signing up.")
+        });
   }
 
   return (
@@ -80,22 +64,16 @@ export const Login = () => {
           {...register("password")}
         />
         <p>{errors.password?.message}</p>
-        <input type="submit" /> 
+        <input type="submit" />
       </form>
       <h4>
-      Don't have an account?
-      <button
-        style={{
-          color: "blue",
-          textDecoration: "underline",
-          cursor: "pointer",
-          border: "none",
-          background: "transparent",
-        }}
-        onClick={handleFormState}
-      >
-        Sign Up
-      </button>
+        Don't have an account?
+        <button
+          className="formStateButton"
+          onClick={handleFormState}
+        >
+          Sign Up
+        </button>
       </h4>
     </div>
   );
