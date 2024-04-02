@@ -45,8 +45,7 @@ export const Login = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           navigate('/Options')
-          setCurrentUser(user.username)
-          console.log(user.username)
+          setCurrentUser(user.email)
         })
         .catch((error) => {
           alert("User credentials wrong or this account doesnt exist, maybe try signing up.")
