@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { auth } from "../config/firebase";
+import { auth, database } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
+import { getDatabase, ref, onValue, query, orderByChild, equalTo } from "firebase/database";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const schema = yup.object().shape({
@@ -16,7 +17,7 @@ const schema = yup.object().shape({
 });
 
 export const Login = () => {
-  const { formState, setFormState, currentUser, setCurrentUser } = useContext(AppContext);
+  const { formState, setFormState, setDisplayName, setCurrentUser } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleFormState = () => {
@@ -38,18 +39,50 @@ export const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data, event) => {
-      event.preventDefault();
-      console.log("data", data);
-      signInWithEmailAndPassword(auth, data.email, data.password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          navigate('/Options')
-          setCurrentUser(data.username);
-        })
-        .catch((error) => {
-          alert("User credentials wrong or this account doesnt exist, maybe try signing up.")
-        });
+  const onSubmit = async (data, event) => {
+    event.preventDefault();
+    console.log("data", data);
+    const result = await signInWithEmailAndPassword(
+      auth,
+      data.email,
+      data.password
+    ).then((userCredential) => {
+      const db = getDatabase();
+      const databaseRef = ref(db, "users");
+      setDisplayName(
+        (userCredential._tokenResponse.displayName = data.username)
+      );
+      setCurrentUser(data.email.replace(/\./g, "_"))
+      onValue(
+        databaseRef,
+        (snapshot) => {
+          const dataRef = snapshot.val();
+        },
+        (errorObject) => {
+          console.log("The read failed: " + errorObject.name);
+        }
+      );
+      const user = userCredential.user;
+      console.log("user", user);
+      navigate("/Options");
+    })
+    .catch((error) => {
+      alert(
+        "User credentials wrong or this account doesnt exist, maybe try signing up."
+      );
+    });
+    handleChildOrder(data);
+  };
+
+  const handleChildOrder = (data) => {
+    const dbRef = ref(database, '/users')
+    const sanitizedEmail = data.email.replace(/\./g, "_");
+    const orderedQuery = query(dbRef, orderByChild('email') ,equalTo(sanitizedEmail));   
+      onValue(orderedQuery, (snapshot) => {
+      console.log("snapshot", snapshot.val())
+      setDisplayName(snapshot.val()[Object.keys(snapshot.val())[0]].username)
+      setCurrentUser(snapshot.val()[Object.keys(snapshot.val())[0]].email)
+    })
   }
 
   return (
@@ -67,10 +100,7 @@ export const Login = () => {
       </form>
       <h4>
         Don't have an account?
-        <button
-          className="formStateButton"
-          onClick={handleFormState}
-        >
+        <button className="formStateButton" onClick={handleFormState}>
           Sign Up
         </button>
       </h4>

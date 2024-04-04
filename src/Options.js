@@ -1,19 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Modal } from './popups/Modal';
-import { push, ref, set, update } from "firebase/database";
+import { push, ref, orderByChild, on, query } from "firebase/database";
 import { database, auth } from './config/firebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from './App';
 
 export const Options = () => {
-  const {currentUser, setFormState, formState} = useContext(AppContext)
+  const {currentUser, setFormState, displayName} = useContext(AppContext)
   const [toggle, setToggle] = useState(false);
   const [typeOfModal, setTypeOfModal] = useState("");
   const navigate = useNavigate();
   
   useEffect(() => {
-    if(currentUser === '') {
+    if(displayName === '') {
       navigate('/')
     } 
   })
@@ -21,10 +21,9 @@ export const Options = () => {
   function writeUserData() {
     const db = database;
     push(ref(db, 'users/' + currentUser), {
-      user: currentUser,
       location: localStorage.getItem('location'),
       rating: localStorage.getItem('rating'),
-      count: localStorage.getItem('count')
+      count: localStorage.getItem('count'),
     });
   }
   
@@ -39,7 +38,7 @@ export const Options = () => {
 
   return (
     <div className="options">
-      <h1>Current user: {currentUser}</h1>
+      <h1>Current user: {displayName}</h1>
     <Modal closeModal={() => setToggle(!toggle)} toggle={toggle} typeOfModal={typeOfModal} />
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Log') }}>Log no.</button>
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Locate') }}>Location</button>

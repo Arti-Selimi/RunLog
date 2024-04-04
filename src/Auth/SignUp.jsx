@@ -6,11 +6,10 @@ import { auth, database } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { ref, set} from "firebase/database"
+import { ref, set } from "firebase/database";
 
 export const SignUp = () => {
-  const { formState, setFormState, currentUser, setCurrentUser } =
-    useContext(AppContext);
+  const { formState, setFormState, setDisplayName } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleFormState = () => {
@@ -52,19 +51,18 @@ export const SignUp = () => {
   const onSubmit = async (data, event) => {
     event.preventDefault();
     console.log("data", data);
-    createUserWithEmailAndPassword(
+    const result = await createUserWithEmailAndPassword(
       auth,
       data.email,
-      data.password,
-      data.username
+      data.password
     )
       .then((userCredential) => {
         const user = userCredential.user;
-        navigate("/Options");
-        console.log(data.username)
-        setCurrentUser(data.username);
+        navigate("/");
         const db = database;
-        set(ref(db, 'users/' + data.username), {    
+        set(ref(db, "users/" + data.email.replace(/\./g, "_")), {
+          email: data.email.replace(/\./g, "_"),
+          username: data.username.replace(/\./g, "_")
         });
       })
       .catch((error) => {
@@ -72,7 +70,7 @@ export const SignUp = () => {
         alert("This user already exists, try logging in");
         reset();
       });
-    };
+  };
 
   return (
     <div>

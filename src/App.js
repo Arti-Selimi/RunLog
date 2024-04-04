@@ -5,25 +5,26 @@ import { SignUp } from "./Auth/SignUp";
 import {
   BrowserRouter as Router,
   Routes,
-  Route
+  Route,
 } from "react-router-dom";
 import { useState, createContext } from "react";
 import { Login } from "./Auth/Login";
 
-
 export const AppContext = createContext();
 
 function App() {
-  const [formState, setFormState] = useState(true)
-  const [currentUser, setCurrentUser] = useState("");
-  
+  const [formState, setFormState] = useState(true)  
+  const [displayName, setDisplayName] = useState("")
+  const [currentUser, setCurrentUser] = useState("")
   return (
     <div className="container">
       <AppContext.Provider value={{
-        currentUser,
-        setCurrentUser,
         formState,
-        setFormState,
+        setFormState,       
+        displayName, 
+        setDisplayName,
+        currentUser, 
+        setCurrentUser
       }}>
         <Router>
           <Navbar />
