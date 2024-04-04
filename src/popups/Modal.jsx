@@ -4,7 +4,6 @@ import { FaStar } from "react-icons/fa";
 
 export const Modal = (props) => {
   const [count, setCount] = useState(0);
-  const [value, setValue] = useState("");
   const [location, setLocation] = useState("");
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);

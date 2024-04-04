@@ -9,7 +9,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ref, set } from "firebase/database";
 
 export const SignUp = () => {
-  const { formState, setFormState, setDisplayName } = useContext(AppContext);
+  const { formState, setFormState } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleFormState = () => {

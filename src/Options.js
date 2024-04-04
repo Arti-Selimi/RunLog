@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Modal } from './popups/Modal';
-import { push, ref, orderByChild, on, query } from "firebase/database";
+import { push, ref } from "firebase/database";
 import { database, auth } from './config/firebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
