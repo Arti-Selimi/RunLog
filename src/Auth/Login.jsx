@@ -17,7 +17,7 @@ const schema = yup.object().shape({
 });
 
 export const Login = () => {
-  const { formState, setFormState, setDisplayName, setCurrentUser } = useContext(AppContext);
+  const { formState, setFormState, setDisplayName, setCurrentUser, handleNextLog } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleFormState = () => {
@@ -53,23 +53,17 @@ export const Login = () => {
         (userCredential._tokenResponse.displayName = data.username)
       );
       setCurrentUser(data.email.replace(/\./g, "_"))
-      onValue(
-        databaseRef,
-        (snapshot) => {
-          const dataRef = snapshot.val();
-        },
-        (errorObject) => {
-          console.log("The read failed: " + errorObject.name);
-        }
-      );
       const user = userCredential.user;
       console.log("user", user);
       navigate("/Options");
+      handleNextLog(data)
     })
     .catch((error) => {
       alert(
         "User credentials wrong or this account doesnt exist, maybe try signing up."
       );
+      reset();
+      console.log(error)
     });
     handleChildOrder(data);
   };

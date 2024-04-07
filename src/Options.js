@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from './App';
 
 export const Options = () => {
-  const {currentUser, setFormState, displayName} = useContext(AppContext)
+  const {currentUser, setFormState, displayName, month, day, year, handleNextLog} = useContext(AppContext)
   const [toggle, setToggle] = useState(false);
   const [typeOfModal, setTypeOfModal] = useState("");
   const navigate = useNavigate();
@@ -20,10 +20,11 @@ export const Options = () => {
 
   function writeUserData() {
     const db = database;
-    push(ref(db, 'users/' + currentUser), {
+    push(ref(db, 'users/' + currentUser + "/logs/"), {
       location: localStorage.getItem('location'),
       rating: localStorage.getItem('rating'),
       count: localStorage.getItem('count'),
+      date: day + "." + month + "." + year
     });
   }
   
@@ -38,12 +39,13 @@ export const Options = () => {
 
   return (
     <div className="options">
+      <h1>Date: {day + "." + month + "." + year}</h1>
       <h1>Current user: {displayName}</h1>
     <Modal closeModal={() => setToggle(!toggle)} toggle={toggle} typeOfModal={typeOfModal} />
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Log') }}>Log no.</button>
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Locate') }}>Location</button>
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Rate') }}>Rating</button>
-    <button onClick={()=>writeUserData()}>Test Set Values</button>
+    <button onClick={()=> writeUserData()}>Log le poop</button>
     <button onClick={() => {handleSignOut(); setFormState(false)}} >Sign out</button>
     </div>
   );

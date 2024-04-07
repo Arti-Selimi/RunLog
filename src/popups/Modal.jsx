@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useMemo, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
+import { AppContext } from "../App";
 
 export const Modal = (props) => {
-  const [count, setCount] = useState(0);
   const [location, setLocation] = useState("");
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
+  const {count, setCount} = useContext(AppContext)
 
   useEffect(() => {
     if (count) {
@@ -20,18 +21,6 @@ export const Modal = (props) => {
     }
   });
 
-  const itemCount = useMemo(
-    () =>
-      count === 0
-        ? "1st"
-        : count === 1
-        ? "2nd"
-        : count === 2
-        ? "3rd"
-        : `${count + 1}th`,
-    [count]
-  );
-
   if (props.toggle) {
     return (
       <div className="modal" onClick={() => props.closeModal()}>
@@ -39,14 +28,13 @@ export const Modal = (props) => {
         <div className="modal__container">
           {props.typeOfModal === "Log" && (
             <>
-              <p>This is your {itemCount} poop for the day ^_^</p>
+              <p>You have pooped {count} times today, yippie ^-^</p>
               <button
                 onClick={() => {
-                  setCount(count + 1);
                   props.closeModal();
                 }}
               >
-                Log
+                Add a poop
               </button>
             </>
           )}
