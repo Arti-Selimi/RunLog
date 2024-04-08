@@ -21,6 +21,18 @@ export const Modal = (props) => {
     }
   });
 
+  const itemCount = useMemo(
+    () =>
+      count === 1
+        ? `${count}st`
+        : count === 2
+        ? `${count}nd`
+        : count === 3
+        ? `${count}rd`
+        : `${count}th`,
+    [count]
+  );
+
   if (props.toggle) {
     return (
       <div className="modal" onClick={() => props.closeModal()}>
@@ -28,13 +40,13 @@ export const Modal = (props) => {
         <div className="modal__container">
           {props.typeOfModal === "Log" && (
             <>
-              <p>You have pooped {count} times today, yippie ^-^</p>
+              <p>This is your {itemCount} poop for the day ^_^</p>
               <button
                 onClick={() => {
                   props.closeModal();
                 }}
               >
-                Add a poop
+                Log
               </button>
             </>
           )}
