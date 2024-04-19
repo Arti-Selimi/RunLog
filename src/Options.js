@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from './App';
 
 export const Options = () => {
-  const {currentUser, setFormState, displayName, month, day, year,count, setCount} = useContext(AppContext)
+  const {currentUser, setFormState, displayName, month, day, year,count, setCount, formState} = useContext(AppContext)
   const [toggle, setToggle] = useState(false);
   const [typeOfModal, setTypeOfModal] = useState("");
   const navigate = useNavigate();
@@ -24,7 +24,8 @@ export const Options = () => {
       location: localStorage.getItem('location'),
       rating: localStorage.getItem('rating'),
       count: localStorage.getItem('count'),
-      date: day + "." + month + "." + year
+      date: day + "." + month + "." + year,
+      distance: localStorage.getItem('distance') + "km"
     });
   }
   
@@ -45,8 +46,9 @@ export const Options = () => {
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Log') }}>Log no.</button>
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Locate') }}>Location</button>
     <button onClick={() => { setToggle(!toggle); setTypeOfModal('Rate') }}>Rating</button>
-    <button onClick={()=> {writeUserData(); setCount(count + 1)}}>Log le poop</button>
-    <button onClick={() => {handleSignOut(); setFormState(false)}} >Sign out</button>
+    <button onClick={() => { setToggle(!toggle); setTypeOfModal('Distance') }}>Distance</button>
+    <button onClick={()=> {writeUserData(); setCount(count + 1)}}>Log the run</button>
+    <button onClick={() => {handleSignOut(); setFormState(!formState)}} >Sign out</button>
     </div>
   );
 };

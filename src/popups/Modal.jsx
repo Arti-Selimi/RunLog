@@ -7,7 +7,8 @@ export const Modal = (props) => {
   const [location, setLocation] = useState("");
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
-  const {count, setCount} = useContext(AppContext)
+  const { count, setCount } = useContext(AppContext);
+  const [distance, setDistance] = useState(null);
 
   useEffect(() => {
     if (count) {
@@ -18,6 +19,9 @@ export const Modal = (props) => {
     }
     if (location) {
       localStorage.setItem("location", location);
+    }
+    if (distance) {
+      localStorage.setItem("distance", distance);
     }
   });
 
@@ -40,7 +44,7 @@ export const Modal = (props) => {
         <div className="modal__container">
           {props.typeOfModal === "Log" && (
             <>
-              <p>This is your {itemCount} poop for the day ^_^</p>
+              <p>This is your {itemCount} run for the day ^_^</p>
               <button
                 onClick={() => {
                   props.closeModal();
@@ -52,30 +56,30 @@ export const Modal = (props) => {
           )}
           {props.typeOfModal === "Locate" && (
             <>
-              <p>Just took a huge poo at</p>
+              <p>Just managed a proper run at</p>
               <button
                 onClick={() => {
-                  setLocation("Zyre");
+                  setLocation("On the wild");
                   props.closeModal();
                 }}
               >
-                Zyre 🙈
+                On the wild 🦅
               </button>
               <button
                 onClick={() => {
-                  setLocation("Shpi");
+                  setLocation("Gym");
                   props.closeModal();
                 }}
               >
-                Shpi 😒
+                Gym 😒
               </button>
               <button
                 onClick={() => {
-                  setLocation("Banese");
+                  setLocation("Other");
                   props.closeModal();
                 }}
               >
-                Banese 🦅
+                Other 🙈
               </button>
             </>
           )}
@@ -108,6 +112,30 @@ export const Modal = (props) => {
                 })}
               </div>
               <p>out of 5!!</p>
+            </>
+          )}
+          {props.typeOfModal === "Distance" && (
+            <>
+              <p>
+                You ran for{" "}
+                <input
+                  type="number"
+                  id="distance"
+                  size={1}
+                  autoFocus
+                  onChange={(e) => {
+                    setDistance(e.target.value);
+                  }}
+                />
+                km
+              </p>
+              <button
+                onClick={() => {
+                  props.closeModal();
+                }}
+              >
+                Log Distance
+              </button>
             </>
           )}
         </div>

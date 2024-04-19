@@ -3,7 +3,7 @@ import { Navbar } from "./Navbar";
 import { Options } from "./Options";
 import { SignUp } from "./Auth/SignUp";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext } from "react";
 import { Login } from "./Auth/Login";
 import { database } from "./config/firebase";
 import { ref, query, onValue, orderByChild, equalTo } from "firebase/database";
@@ -20,7 +20,6 @@ function App() {
   const [displayName, setDisplayName] = useState("");
   const [currentUser, setCurrentUser] = useState("");
   const [count, setCount] = useState(null);
-  const [logState, setLogState] = useState(false)
 
   const handleNextLog = (data) => {
     const logRef = ref(
